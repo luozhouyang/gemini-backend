@@ -13,27 +13,27 @@ type Comment struct {
 	Content string
 }
 
-func InsertComment(c *Comment) (err error) {
+func InsertComment(c *Comment) error {
 	o := orm.NewOrm()
-	_, err = o.Insert(&c)
+	_, err := o.Insert(&c)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteComment(c *Comment) (err error) {
+func DeleteComment(c *Comment) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&c)
+	_, err := o.Delete(&c)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteCommentById(id int64) (err error) {
+func DeleteCommentById(id int64) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&Comment{Id: id})
+	_, err := o.Delete(&Comment{Id: id})
 	if err != nil {
 		return err
 	}

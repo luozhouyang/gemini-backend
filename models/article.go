@@ -19,28 +19,28 @@ type Article struct {
 	Comments []Comment `orm:"reverse(many)"`
 }
 
-func InsertArticle(a Article) (err error) {
+func InsertArticle(a Article) error {
 	o := orm.NewOrm()
 	//o.Using(mysqldb)
-	_, err = o.Insert(a)
+	_, err := o.Insert(a)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteArticleById(id int64) (err error) {
+func DeleteArticleById(id int64) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&Article{Id: id})
+	_, err := o.Delete(&Article{Id: id})
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteArticle(a *Article) (err error) {
+func DeleteArticle(a *Article) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&a)
+	_, err := o.Delete(&a)
 	if err != nil {
 		return err
 	}

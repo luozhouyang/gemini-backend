@@ -16,27 +16,27 @@ type Author struct {
 	Github  string
 }
 
-func InsertAuthor(a *Author) (err error) {
+func InsertAuthor(a *Author) error {
 	o := orm.NewOrm()
-	_, err = o.Insert(&a)
+	_, err := o.Insert(&a)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteAuthor(a *Author) (err error) {
+func DeleteAuthor(a *Author) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&a)
+	_, err := o.Delete(&a)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteAuthorById(id int64) (err error) {
+func DeleteAuthorById(id int64) error {
 	o := orm.NewOrm()
-	_, err = o.Delete(&Author{Id: id})
+	_, err := o.Delete(&Author{Id: id})
 	if err != nil {
 		return err
 	}
