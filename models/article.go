@@ -13,7 +13,7 @@ func init() {
 type Article struct {
 	Id       int64     `orm:"auto"`
 	Title    string    `orm:"size(20)"`
-	Author   Author    `orm:"rel(fk)"`
+	User     User      `orm:"rel(fk)"`
 	Time     time.Time
 	Content  string
 	Comments []Comment `orm:"reverse(many)"`

@@ -8,8 +8,8 @@ func init() {
 }
 
 type Comment struct {
-	Id      int64  `orm:"auto"`
-	Author  Author `orm:"reverse(one)"`
+	Id      int64 `orm:"auto"`
+	User    User  `orm:"reverse(one)"`
 	Content string
 }
 

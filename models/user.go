@@ -3,11 +3,11 @@ package models
 import "github.com/astaxie/beego/orm"
 
 func init() {
-	orm.RegisterModel(new(Author))
+	orm.RegisterModel(new(User))
 	orm.RunSyncdb(mysqldb, false, true)
 }
 
-type Author struct {
+type User struct {
 	Id      int64  `orm:"auto"`
 	Name    string `orm:"size(20)"`
 	Bio     string
@@ -16,7 +16,7 @@ type Author struct {
 	Github  string
 }
 
-func InsertAuthor(a *Author) error {
+func InsertUser(a *User) error {
 	o := orm.NewOrm()
 	_, err := o.Insert(&a)
 	if err != nil {
@@ -25,7 +25,7 @@ func InsertAuthor(a *Author) error {
 	return nil
 }
 
-func DeleteAuthor(a *Author) error {
+func DeleteUser(a *User) error {
 	o := orm.NewOrm()
 	_, err := o.Delete(&a)
 	if err != nil {
@@ -34,9 +34,9 @@ func DeleteAuthor(a *Author) error {
 	return nil
 }
 
-func DeleteAuthorById(id int64) error {
+func DeleteUserById(id int64) error {
 	o := orm.NewOrm()
-	_, err := o.Delete(&Author{Id: id})
+	_, err := o.Delete(&User{Id: id})
 	if err != nil {
 		return err
 	}
