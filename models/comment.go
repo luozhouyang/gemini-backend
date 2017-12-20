@@ -2,14 +2,10 @@ package models
 
 import "github.com/astaxie/beego/orm"
 
-func init() {
-	orm.RegisterModel(new(Comment))
-	orm.RunSyncdb(mysqldb, false, true)
-}
-
 type Comment struct {
 	Id      int64 `orm:"auto"`
-	User    User  `orm:"reverse(one)"`
+	Article *Article
+	User    *User `orm:"reverse(one)"`
 	Content string
 }
 
