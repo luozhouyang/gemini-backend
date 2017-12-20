@@ -11,17 +11,22 @@ func init() {
 }
 
 type Article struct {
-	Id       int64     `orm:"auto"`
-	Title    string    `orm:"size(20)"`
-	User     User      `orm:"rel(fk)"`
+	Id       int64      `orm:"auto"`
+	Title    string     `orm:"size(20)"`
+	User     *User      `orm:"rel(fk)"`
 	Time     time.Time
 	Content  string
-	Comments []Comment `orm:"reverse(many)"`
+	Comments []*Comment `orm:"reverse(many)"`
+}
+
+func getOrmer() orm.Ormer {
+	o := orm.NewOrm()
+	o.Using(mysqldb)
+	return o
 }
 
 func InsertArticle(a Article) error {
-	o := orm.NewOrm()
-	//o.Using(mysqldb)
+	o := getOrmer()
 	_, err := o.Insert(a)
 	if err != nil {
 		return err
@@ -30,7 +35,7 @@ func InsertArticle(a Article) error {
 }
 
 func DeleteArticleById(id int64) error {
-	o := orm.NewOrm()
+	o := getOrmer()
 	_, err := o.Delete(&Article{Id: id})
 	if err != nil {
 		return err
@@ -39,7 +44,7 @@ func DeleteArticleById(id int64) error {
 }
 
 func DeleteArticle(a *Article) error {
-	o := orm.NewOrm()
+	o := getOrmer()
 	_, err := o.Delete(&a)
 	if err != nil {
 		return err
