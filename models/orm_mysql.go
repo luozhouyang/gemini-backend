@@ -9,11 +9,12 @@ import (
 func init() {
 	mysqluser := beego.AppConfig.String("mysqluser")
 	mysqlpass := beego.AppConfig.String("mysqlpass")
-	mysqlurl := beego.AppConfig.String("mysqlurl")
-	mysqldb := beego.AppConfig.String("mysqldb")
-	datasource := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlurl + ")/" + mysqldb + "?charset=utf8"
+	mysqlurl := beego.AppConfig.String("mysqlurls")
+	mysqldbname := beego.AppConfig.String("mysqldb")
+	datasource := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlurl + ")/" + mysqldbname + "?charset=utf8"
 	orm.RegisterDriver("mysql", orm.DRMySQL)
+	datasource = "gemini:usergemini@tcp(localhost:3306)/gemini_db?charset=utf8"
 	orm.RegisterDataBase("default", "mysql", datasource)
+	orm.RegisterModel(new(Article), new(User), new(Comment))
+	orm.RunSyncdb("default", false, true)
 }
-
-var mysqldb = beego.AppConfig.String("mysqldb")
