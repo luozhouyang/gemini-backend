@@ -3,10 +3,10 @@ package models
 import "github.com/astaxie/beego/orm"
 
 type Comment struct {
-	Id      int64 `orm:"auto"`
-	Article *Article
-	User    *User `orm:"reverse(one)"`
-	Content string
+	Id      int64    `orm:"auto"`
+	Article *Article `orm:"rel(fk)"`
+	User    *User    `orm:"rel(one)"`
+	Content string   `orm:"size(1000)"`
 }
 
 func InsertComment(c *Comment) error {

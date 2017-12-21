@@ -8,9 +8,10 @@ import (
 type Article struct {
 	Id       int64      `orm:"auto"`
 	Title    string     `orm:"size(20)"`
-	User     *User      `orm:"rel(fk)"`
-	Time     time.Time
-	Content  string
+	Author   *User      `orm:"rel(fk)"`
+	Created  time.Time  `orm:"auto_now_add"`
+	Updated  time.Time  `orm:"auto_now"`
+	Content  string     `orm:"size(65535)"`
 	Comments []*Comment `orm:"reverse(many)"`
 }
 

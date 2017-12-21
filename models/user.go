@@ -2,18 +2,14 @@ package models
 
 import "github.com/astaxie/beego/orm"
 
-func init() {
-	orm.RegisterModel(new(User))
-	orm.RunSyncdb(mysqldb, false, true)
-}
-
 type User struct {
-	Id      int64  `orm:"auto"`
-	Name    string `orm:"size(20)"`
-	Bio     string
-	Website string
-	Email   string
-	Github  string
+	Id       int64      `orm:"auto"`
+	Name     string     `orm:"size(20)"`
+	Bio      string
+	Website  string
+	Email    string
+	Github   string
+	Articles []*Article `orm:"reverse(many)"`
 }
 
 func InsertUser(a *User) error {
