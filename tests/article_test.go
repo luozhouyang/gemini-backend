@@ -31,7 +31,7 @@ func TestInsertArticle(t *testing.T) {
 		Comments: comments,
 		Content:  "Hello everyone! This is a test article.",
 	}
-	err := models.InsertArticle(a)
+	err := models.InsertArticle(&a)
 	if err != nil {
 		t.Log("Error occurs when inserting article")
 		return

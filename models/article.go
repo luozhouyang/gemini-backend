@@ -15,7 +15,7 @@ type Article struct {
 	Comments []*Comment `orm:"reverse(many)"`
 }
 
-func InsertArticle(a Article) error {
+func InsertArticle(a *Article) error {
 	o := orm.NewOrm()
 	_, err := o.Insert(a)
 	if err != nil {
@@ -35,7 +35,7 @@ func DeleteArticleById(id int64) error {
 
 func DeleteArticle(a *Article) error {
 	o := orm.NewOrm()
-	_, err := o.Delete(&a)
+	_, err := o.Delete(a)
 	if err != nil {
 		return err
 	}

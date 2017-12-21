@@ -11,7 +11,7 @@ type Comment struct {
 
 func InsertComment(c *Comment) error {
 	o := orm.NewOrm()
-	_, err := o.Insert(&c)
+	_, err := o.Insert(c)
 	if err != nil {
 		return err
 	}
@@ -20,7 +20,7 @@ func InsertComment(c *Comment) error {
 
 func DeleteComment(c *Comment) error {
 	o := orm.NewOrm()
-	_, err := o.Delete(&c)
+	_, err := o.Delete(c)
 	if err != nil {
 		return err
 	}
