@@ -67,7 +67,7 @@ func QueryArticleById(id int64) *Article {
 	}
 }
 
-func QueryArticleByTitle(title string) error {
+func QueryArticleByTitle(title string) *Article {
 	o := orm.NewOrm()
 	a := Article{Title: title}
 	err := o.Read(&a, "")
