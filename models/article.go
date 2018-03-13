@@ -4,10 +4,23 @@ import (
 	"time"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/astaxie/beego"
+	"fmt"
 )
 
 func init() {
+	beego.LoadAppConfig("ini", "/home/allen/Go/src/backend/conf/app.conf")
+	usr := beego.AppConfig.String("dev::mysqluser")
+	pass := beego.AppConfig.String("dev::mysqlpass")
+	url := beego.AppConfig.String("dev::mysqlurls")
+	db := beego.AppConfig.String("dev::mysqldb")
+	ds := usr + ":" + pass + "@tcp(" + url + ")/" + db + "?charset=utf8"
+	err := orm.RegisterDataBase("default", "mysql", ds, 1, 10)
+	if err != nil {
+		fmt.Println("RegisterDataBase Failed...")
+	}
 	orm.RegisterModel(new(Article))
+	orm.RunSyncdb("default", false, true)
 }
 
 type Article struct {
