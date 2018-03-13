@@ -3,10 +3,10 @@ package test
 import (
 	"testing"
 	"backend/models"
-	"time"
 	"runtime"
 	"path/filepath"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 func init() {
@@ -16,25 +16,20 @@ func init() {
 }
 
 func TestInsertArticle(t *testing.T) {
-	comments := make([]*models.Comment, 1)
 	a := models.Article{
-		Id:      123456,
+		Id:      1,
 		Title:   "Hello World",
-		Created: time.Now(),
-		Author: &models.User{
-			Id:      2314,
-			Bio:     "",
-			Name:    "Allen",
-			Website: "",
-			Github:  "https://github.com/luozhouyang",
-		},
-		Comments: comments,
-		Content:  "Hello everyone! This is a test article.",
+		Author:  "stupidme.me",
+		Content: "Hello world from stupidme.me!",
 	}
 	err := models.InsertArticle(&a)
 	if err != nil {
-		t.Log("Error occurs when inserting article")
-		return
+		//panic(err)
 	}
-	t.Log("Successful to insert article")
+	ar := models.QueryArticleById(1)
+	if ar != nil {
+		logs.GetLogger("TestArticle").Fatal("Insert article successfully!")
+	} else {
+		logs.GetLogger("TestArticle").Fatal("Insert article FAILED!")
+	}
 }
