@@ -6,10 +6,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/astaxie/beego"
 	"fmt"
+	"os"
+	"path/filepath"
 )
 
 func init() {
-	beego.LoadAppConfig("ini", "/home/allen/Go/src/backend/conf/app.conf")
+	dir, _ := os.Getwd()
+	confpath := filepath.Join(dir, "/../conf/app.conf")
+	beego.LoadAppConfig("ini", confpath)
 	usr := beego.AppConfig.String("dev::mysqluser")
 	pass := beego.AppConfig.String("dev::mysqlpass")
 	url := beego.AppConfig.String("dev::mysqlurls")
