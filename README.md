@@ -11,12 +11,16 @@ mysql -u root -p
 
 mysql> create user 'gemini'@'localhost' identified by 'usergemini';
 mysql> create database gemini_db;
-mysql> grant all privileges on gemini_db.* to gemini@ocalhost identified by 'usergemini';
+mysql> grant all privileges on gemini_db.* to gemini@localhost identified by 'usergemini';
 mysql>
 mysql> create database gemini_db_dev;
-mysql> grant all privileges on gemini_db_dev.* to gemini@ocalhost identified by 'usergemini';
+mysql> grant all privileges on gemini_db_dev.* to gemini@localhost identified by 'usergemini';
 mysql>
 mysql> create database gemini_db_test;
-mysql> grant all privileges on gemini_db_test.* to gemini@ocalhost identified by 'usergemini';
+mysql> grant all privileges on gemini_db_test.* to gemini@localhost identified by 'usergemini';
 mysql>
 ```
+
+Notice:
+> If you specified port when create user, you need to specified the port in con/app.conf too. Or you will meet errors when connect mysql database.
+
