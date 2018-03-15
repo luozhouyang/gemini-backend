@@ -1,12 +1,10 @@
 # Gemini-backend
-README: [ English ](README_EN.md)|[ 中文 ](README.md)
-　　
-
-本项目作为 **[gemini-frontend](https://github.com/luozhouyang/gemini-frontend)** 项目的后端，使用HTTP协议进行通信。　　
+This project is used as a backend service for **gemini**.
 
 
-## 创建数据库
-本项目使用mysql数据库存储数据，因此在运行项目之前，你应该创建以下几个数据库。　　
+## Create databases
+To ensure that this program runs correctly, you need to create databases that this program needs.
+Here are the commands to create mysql databases:
 　　
 ```bash
 mysql -u root -p
@@ -23,6 +21,6 @@ mysql> grant all privileges on gemini_db_test.* to gemini@localhost identified b
 mysql>
 ```
 
-注意:
-> 如果你在创建数据库的时候，指定了端口号，那么在项目的配置文件中，也需要加上端口号。　　
+Notice:
+> If you specified port when create user, you need to specified the port in con/app.conf too. Or you will meet errors when connect mysql database.
 
