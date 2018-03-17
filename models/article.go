@@ -28,22 +28,32 @@ func init() {
 }
 
 type Article struct {
-	Id      int64     `orm:"auto"`
-	Title   string    `orm:"size(20)"`
-	Author  string    `orm:"size(20)"`
-	Created time.Time `orm:"auto_now_add"`
-	Updated time.Time `orm:"auto_now"`
-	Content string    `orm:"size(65535)"`
+	Id      int64     `orm:"auto" json:"id,string"`
+	Title   string    `orm:"size(20)" json:"title"`
+	Author  string    `orm:"size(20)" json:"author"`
+	Created time.Time `orm:"auto_now_add" json:"-"`
+	Updated time.Time `orm:"auto_now" json:"updated"`
+	Content string    `orm:"size(65535)" json:"content"`
 }
 
-func InsertArticle(a *Article) error {
+func (a *Article) TableIndex() [][]string {
+	return [][]string{
+		{"Id", "Title", "Author", "Updated"},
+	}
+}
+
+func InsertArticle(a *Article) (int64, error) {
 	o := orm.NewOrm()
 	//TODO(luozhouyang): InsertOrUpdate does not work. Always insert a record and inc pk.
 	_, err := o.InsertOrUpdate(a)
 	if err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	err = o.Read(a, "Title", "Author", "Updated")
+	if err != nil {
+		return -1, err
+	}
+	return a.Id, nil
 }
 
 func DeleteArticleById(id int64) error {
@@ -118,4 +128,58 @@ func QueryArticlesByAuthor(author string) ([]*Article, error) {
 	} else {
 		return articles, nil
 	}
+}
+
+func QueryArticlesByDate(date string) ([]*Article, error) {
+	o := orm.NewOrm()
+	var articles []*Article
+	_, err := o.QueryTable("article").Filter("Updated__istartswith", date).All(&articles)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func QueryArticlesByAuthorAndDateAndTitle(author, date, title string) ([]*Article, error) {
+	o := orm.NewOrm()
+	var articles []*Article
+	_, err := o.QueryTable("article").Filter("Author", author).
+		Filter("Updated__istartswith", date).Filter("Title", title).All(&articles)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func QueryArticlesByAuthorAndDate(author, date string) ([]*Article, error) {
+	o := orm.NewOrm()
+	var articles []*Article
+	_, err := o.QueryTable("article").Filter("Author", author).
+		Filter("Updated__istartswith", date).All(&articles)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func QueryArticlesByAuthorAndTitle(author, title string) ([]*Article, error) {
+	o := orm.NewOrm()
+	var articles []*Article
+	_, err := o.QueryTable("article").Filter("Author", author).
+		Filter("Title", title).All(&articles)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func QueryArticlesByTitleAndDate(title, date string) ([]*Article, error) {
+	o := orm.NewOrm()
+	var articles []*Article
+	_, err := o.QueryTable("article").Filter("Updated__istartswith", date).
+		Filter("Title", title).All(&articles)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
 }
