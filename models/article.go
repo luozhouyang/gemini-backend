@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func init() {
@@ -130,10 +131,24 @@ func QueryArticlesByAuthor(author string) ([]*Article, error) {
 	}
 }
 
+type dateFormatErr struct {
+	error
+}
+
+func (e dateFormatErr) Error() string {
+	return "Format of date is incorrectly!"
+}
+
 func QueryArticlesByDate(date string) ([]*Article, error) {
 	o := orm.NewOrm()
+	days := strings.Split(date, "~")
+	if len(days) != 2 {
+		return nil, dateFormatErr{}
+	}
+	day0, day1 := days[0], days[1]
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("updated__istartswith", date).All(&articles)
+	_, err := o.QueryTable("article").
+		Filter("updated__gt", day0).Filter("updated__lt", day1).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -142,9 +157,14 @@ func QueryArticlesByDate(date string) ([]*Article, error) {
 
 func QueryArticlesByAuthorAndDateAndTitle(author, date, title string) ([]*Article, error) {
 	o := orm.NewOrm()
+	days := strings.Split(date, "~")
+	if len(days) != 2 {
+		return nil, dateFormatErr{}
+	}
+	day0, day1 := days[0], days[1]
 	var articles []*Article
 	_, err := o.QueryTable("article").Filter("author", author).
-		Filter("updated__istartswith", date).Filter("title", title).All(&articles)
+		Filter("updated__gt", day0).Filter("updated__lt", day1).Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -153,9 +173,14 @@ func QueryArticlesByAuthorAndDateAndTitle(author, date, title string) ([]*Articl
 
 func QueryArticlesByAuthorAndDate(author, date string) ([]*Article, error) {
 	o := orm.NewOrm()
+	days := strings.Split(date, "~")
+	if len(days) != 2 {
+		return nil, dateFormatErr{}
+	}
+	day0, day1 := days[0], days[1]
 	var articles []*Article
 	_, err := o.QueryTable("article").Filter("author", author).
-		Filter("updated__istartswith", date).All(&articles)
+		Filter("updated__gt", day0).Filter("updated__lt", day1).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -175,8 +200,14 @@ func QueryArticlesByAuthorAndTitle(author, title string) ([]*Article, error) {
 
 func QueryArticlesByTitleAndDate(title, date string) ([]*Article, error) {
 	o := orm.NewOrm()
+	days := strings.Split(date, "~")
+	if len(days) != 2 {
+		return nil, dateFormatErr{}
+	}
+	day0, day1 := days[0], days[1]
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("updated__istartswith", date).
+	_, err := o.QueryTable("article").
+		Filter("updated__gt", day0).Filter("updated__lt", day1).
 		Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err

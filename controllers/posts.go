@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"backend/models"
 	"encoding/json"
+	"time"
+	"log"
 )
 
 type PostsController struct {
@@ -13,6 +15,14 @@ type PostsController struct {
 func (c *PostsController) Get() {
 	author := c.GetString("author")
 	date := c.GetString("date")
+	today, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	tomorrow := today.Add(24 * time.Hour)
+	date = today.String() + "~" + tomorrow.String()
+	log.Println(date)
 	title := c.GetString("title")
 	if author != "" && date != "" && title != "" {
 		articles, err := models.QueryArticlesByAuthorAndDateAndTitle(author, date, title)
