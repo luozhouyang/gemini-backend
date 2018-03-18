@@ -111,7 +111,7 @@ func QueryArticleById(id int64) (*Article, error) {
 func QueryArticlesByTitle(title string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Title", title).All(&articles)
+	_, err := o.QueryTable("article").Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err
 	} else {
@@ -122,7 +122,7 @@ func QueryArticlesByTitle(title string) ([]*Article, error) {
 func QueryArticlesByAuthor(author string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Author", author).All(&articles)
+	_, err := o.QueryTable("article").Filter("author", author).All(&articles)
 	if err != nil {
 		return nil, err
 	} else {
@@ -133,7 +133,7 @@ func QueryArticlesByAuthor(author string) ([]*Article, error) {
 func QueryArticlesByDate(date string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Updated__istartswith", date).All(&articles)
+	_, err := o.QueryTable("article").Filter("updated__istartswith", date).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -143,8 +143,8 @@ func QueryArticlesByDate(date string) ([]*Article, error) {
 func QueryArticlesByAuthorAndDateAndTitle(author, date, title string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Author", author).
-		Filter("Updated__istartswith", date).Filter("Title", title).All(&articles)
+	_, err := o.QueryTable("article").Filter("author", author).
+		Filter("updated__istartswith", date).Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -154,8 +154,8 @@ func QueryArticlesByAuthorAndDateAndTitle(author, date, title string) ([]*Articl
 func QueryArticlesByAuthorAndDate(author, date string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Author", author).
-		Filter("Updated__istartswith", date).All(&articles)
+	_, err := o.QueryTable("article").Filter("author", author).
+		Filter("updated__istartswith", date).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -165,8 +165,8 @@ func QueryArticlesByAuthorAndDate(author, date string) ([]*Article, error) {
 func QueryArticlesByAuthorAndTitle(author, title string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Author", author).
-		Filter("Title", title).All(&articles)
+	_, err := o.QueryTable("article").Filter("author", author).
+		Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err
 	}
@@ -176,8 +176,8 @@ func QueryArticlesByAuthorAndTitle(author, title string) ([]*Article, error) {
 func QueryArticlesByTitleAndDate(title, date string) ([]*Article, error) {
 	o := orm.NewOrm()
 	var articles []*Article
-	_, err := o.QueryTable("article").Filter("Updated__istartswith", date).
-		Filter("Title", title).All(&articles)
+	_, err := o.QueryTable("article").Filter("updated__istartswith", date).
+		Filter("title", title).All(&articles)
 	if err != nil {
 		return nil, err
 	}
