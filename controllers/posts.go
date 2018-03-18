@@ -50,23 +50,23 @@ func (c *PostsController) Get() {
 		return
 	}
 	c.Data["json"] = "[]"
-	c.ServeJSON(true, true)
+	c.ServeJSON(true, false)
 }
 
 func serverArticles(c *PostsController, articles []*models.Article, err error) {
 	if err != nil {
 		c.Data["json"] = "[]"
-		c.ServeJSON(true, true)
+		c.ServeJSON(true, false)
 		return
 	}
 	jsons, err := json.Marshal(articles)
 	if err != nil {
 		c.Data["json"] = "[]"
-		c.ServeJSON(true, true)
+		c.ServeJSON(true, false)
 		return
 	}
 	c.Data["json"] = string(jsons)
-	c.ServeJSON(true, true)
+	c.ServeJSON(true, false)
 	return
 }
 
