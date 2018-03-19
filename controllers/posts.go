@@ -10,7 +10,7 @@ type PostsController struct {
 }
 
 func (c *PostsController) Get() {
-	p := &models.ArticleParam{
+	p := &models.ArticleQueryParam{
 		Author: c.GetString("author"),
 		Title:  c.GetString("title"),
 		Date:   c.GetString("date"),

@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-type ArticleParam struct {
+type ArticleQueryParam struct {
 	Author string
 	Title  string
 	Date   string
 }
 
-func QueryArticlesJson(p *ArticleParam) (string, error) {
+func QueryArticlesJson(p *ArticleQueryParam) (string, error) {
 	date := concatDate(p.Date)
 	if p.Author != "" && p.Title != "" && p.Date != "" {
 		articles, err := QueryArticlesByAuthorAndDateAndTitle(p.Author, date, p.Title)
