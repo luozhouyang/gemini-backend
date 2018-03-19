@@ -67,3 +67,33 @@ func concatDate(date string) string {
 	date2 := today.String() + "~" + tomorrow.String()
 	return date2
 }
+
+type ArticlePostParams struct {
+	Title   string
+	Author  string
+	Updated string
+	Content string
+}
+
+func PostArticle(p *ArticlePostParams) (int64, error) {
+	updated := parseUpdatedTime(p.Updated)
+	article := &Article{
+		Title:   p.Title,
+		Author:  p.Author,
+		Updated: updated,
+		Content: p.Content,
+	}
+	id, err := InsertOrUpdateArticle(article)
+	return id, err
+}
+
+func parseUpdatedTime(updated string) time.Time {
+	if updated == "" {
+		return time.Now()
+	}
+	t, err := time.Parse("2006-01-02 00:00:00", updated)
+	if err != nil {
+		return time.Now()
+	}
+	return t
+}
