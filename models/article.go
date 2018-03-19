@@ -57,6 +57,22 @@ func InsertArticle(a *Article) (int64, error) {
 	return a.Id, nil
 }
 
+func InsertOrUpdateArticle(a *Article) (int64, error) {
+	articles, err := QueryArticlesByAuthorAndTitle(a.Author, a.Title)
+	if err != nil {
+		return -1, err
+	}
+	if len(articles) == 0 {
+		o := orm.NewOrm()
+		id, er := o.Insert(a)
+		return id, er
+	}
+	article := articles[0]
+	o := orm.NewOrm()
+	id, err := o.Update(article)
+	return id, err
+}
+
 func DeleteArticleById(id int64) error {
 	o := orm.NewOrm()
 	_, err := o.Delete(&Article{Id: id})
