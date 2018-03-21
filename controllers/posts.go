@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"backend/models"
 	"encoding/json"
+	"backend/token"
 )
 
 type PostsController struct {
@@ -27,6 +28,12 @@ func (c *PostsController) Get() {
 }
 
 func (c *PostsController) Post() {
+	t := c.GetString("token")
+	if t != token.GetToken() {
+		c.Data["json"] = "[]"
+		c.ServeJSON(true, false)
+		return
+	}
 	p := &models.ArticlePostParams{
 		Title:   c.GetString("title"),
 		Author:  c.GetString("author"),
