@@ -75,7 +75,13 @@ type ArticlePostParams struct {
 	Content string
 }
 
-func PostArticle(p *ArticlePostParams) (int64, error) {
+type ArticlePostResponse struct {
+	ErrNumber int
+	Message   string
+	ArticleId int64
+}
+
+func ResponsePostArticle(p *ArticlePostParams) *ArticlePostResponse {
 	updated := parseUpdatedTime(p.Updated)
 	article := &Article{
 		Title:   p.Title,
@@ -84,7 +90,18 @@ func PostArticle(p *ArticlePostParams) (int64, error) {
 		Content: p.Content,
 	}
 	id, err := InsertOrUpdateArticle(article)
-	return id, err
+	if err != nil {
+		return &ArticlePostResponse{
+			ErrNumber: 1,
+			Message:   "Error occurs: " + err.Error(),
+			ArticleId: id,
+		}
+	}
+	return &ArticlePostResponse{
+		ErrNumber: 0,
+		Message:   "Post article successfully.",
+		ArticleId: id,
+	}
 }
 
 func parseUpdatedTime(updated string) time.Time {

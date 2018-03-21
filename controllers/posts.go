@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"backend/models"
+	"encoding/json"
 )
 
 type PostsController struct {
@@ -26,5 +27,19 @@ func (c *PostsController) Get() {
 }
 
 func (c *PostsController) Post() {
-
+	p := &models.ArticlePostParams{
+		Title:   c.GetString("title"),
+		Author:  c.GetString("author"),
+		Updated: c.GetString("updated"),
+		Content: c.GetString("content"),
+	}
+	resp := models.ResponsePostArticle(p)
+	jsons, err := json.Marshal(resp)
+	if err != nil {
+		c.Data["json"] = "[]"
+		c.ServeJSON(true, false)
+		return
+	}
+	c.Data["json"] = jsons
+	c.ServeJSON()
 }
