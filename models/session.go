@@ -44,3 +44,23 @@ func (s *Session) User(user User, err error) {
 		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
 	return
 }
+
+func (u *User) CreateSession() (session Session, err error) {
+	statement := "INSERT INTO sessions (uuid, email, user_id, created_at) VALUES " +
+		"($1, $2, $3, $4) RETURNING id, uuid, email, user_id, created_at"
+	stmt, err := db.Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(createUUID(), u.Email, u.Id, time.Now()).
+		Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+	return
+}
+
+func (u *User) Session() (session Session, err error) {
+	session = Session{}
+	err = db.Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE user_id = $1", u.Id).
+		Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+	return
+}
