@@ -19,7 +19,7 @@ type User struct {
 }
 
 func (u *User) Create() (err error) {
-	statement := "INSERT INTO USERS (uuid, name, email, password, created_at) VALUES " +
+	statement := "INSERT INTO users (uuid, name, email, password, created_at) VALUES " +
 		"($1, $2, $3, $4, $5) RETURNING id, uuid, created_at"
 	stmt, err := db.Db.Prepare(statement)
 	if err != nil {
@@ -43,7 +43,7 @@ func (u *User) Delete() (err error) {
 }
 
 func (u *User) Update() (err error) {
-	statement := "update users set name = $2, email = $3 where id = $1"
+	statement := "UPDATE users SET name = $2, email = $3 WHERE id = $1"
 	stmt, err := db.Db.Prepare(statement)
 	if err != nil {
 		return
