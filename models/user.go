@@ -38,6 +38,26 @@ func (u *User) Session() (session Session, err error) {
 	return
 }
 
+func (u *User) CreateProfile(bio string) (profile Profile, err error) {
+	statement := "INSERT INTO profiles (uuid, bio, user_id, created_at) " +
+		"VALUES ($1, $2, $3, $4) RETURNING id, uuid, bio, user_id, created_at"
+	stmt, err := db.Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(createUUID(), bio, u.Id, time.Now()).
+		Scan(&profile.Id, &profile.Uuid, &profile.Bio, &profile.UserId, &profile.CreatedAt)
+	return
+}
+
+func (u *User) Profile() (profile Profile, err error) {
+	profile = Profile{}
+	err = db.Db.QueryRow("SELECT id, uuid, bio, user_id, created_at FROM profiles WHERE user_id = $1", u.Id).
+		Scan(&profile.Id, &profile.Uuid, &profile.Bio, &profile.UserId, &profile.CreatedAt)
+	return
+}
+
 func (u *User) Create() (err error) {
 	statement := "INSERT INTO USERS (uuid, name, email, password, created_at) VALUES " +
 		"($1, $2, $3, $4, $5) RETURNING id, uuid, created_at"
