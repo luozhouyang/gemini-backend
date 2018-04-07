@@ -123,6 +123,13 @@ func UserByUUID(uuid string) (user User, err error) {
 	return
 }
 
+func UserById(id int) (user User, err error) {
+	user = User{}
+	err = db.Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE id = $1", id).
+		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+	return
+}
+
 func createUUID() (uuid string) {
 	u := new([16]byte)
 	_, err := rand.Read(u[:])
