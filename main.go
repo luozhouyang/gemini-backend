@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"backend/handlers"
 )
 
 func main() {
@@ -9,6 +10,8 @@ func main() {
 	config := NewConfig()
 	files := http.FileServer(http.Dir(config.Static))
 	mux.Handle("/static/", http.StripPrefix("/static", files))
+
+	mux.HandleFunc("/login", handlers.Login)
 
 	server := &http.Server{
 		Addr:    config.Address,
