@@ -12,6 +12,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", files))
 
 	mux.HandleFunc("/login", handlers.Login)
+	mux.HandleFunc("/logout", handlers.Logout)
 	mux.HandleFunc("/signup", handlers.SignUp)
 
 	server := &http.Server{
