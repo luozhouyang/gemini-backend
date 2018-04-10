@@ -26,7 +26,7 @@ func (s *Session) Valid() (valid bool, err error) {
 	return
 }
 
-func (s *Session) DeleteByUUID(uuid string) (err error) {
+func (s *Session) DeleteByUUID() (err error) {
 	statement := "DELETE FROM sessions WHERE uuid = $1"
 	stmt, err := db.Db.Prepare(statement)
 	if err != nil {
