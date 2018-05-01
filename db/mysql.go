@@ -3,31 +3,25 @@ package db
 import (
 	"database/sql"
 	"log"
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 	"fmt"
 )
 
 var ds string
 
 func init() {
-	config := &config{
-		Host:     "0.0.0.0",
-		Port:     "8080",
+	config := &mysqlConfig{
 		User:     "gemini",
 		Password: "usergemini",
-		DbName:   "geminidb",
-		SSLMode:  "disable",
+		DataBase: "gemini_db",
+		Charset:  "utf8",
 	}
 	ds := config.DataSource()
-	println(ds)
-	err := createDatabase()
-	if err != nil {
-		panic(err)
-	}
+	fmt.Printf("mysql datasource: %s", ds)
 }
 
 func NewDataBase() (*sql.DB, error) {
-	db, err := sql.Open("postgres", ds)
+	db, err := sql.Open("mysql", ds)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
@@ -36,14 +30,14 @@ func NewDataBase() (*sql.DB, error) {
 }
 
 const CreateTable = "CREATE TABLE IF NOT EXISTS articles (" +
-	"id SERIAL PRIMARY KEY, " +
+	"id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
 	"uuid VARCHAR(64) UNIQUE NOT NULL, " +
 	"tags VARCHAR(255), " +
 	"title VARCHAR(255) NOT NULL, " +
-	"author VARCHAR(255) NOT NULL, " +
+	"author VARCHAR(64) NOT NULL, " +
 	"content TEXT NOT NULL, " +
-	"updated_at TIMESTAMP NOT NULL, " +
-	"created_at TIMESTAMP NOT NULL" +
+	"updated_at DATE NULL DEFAULT NULL, " +
+	"created_at DATE NULL DEFAULT NULL" +
 	")"
 
 func createDatabase() error {
@@ -60,16 +54,13 @@ func createDatabase() error {
 	return nil
 }
 
-type config struct {
-	Host     string
-	Port     string
+type mysqlConfig struct {
 	User     string
 	Password string
-	DbName   string
-	SSLMode  string
+	DataBase string
+	Charset  string
 }
 
-func (c *config) DataSource() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		c.Host, c.Port, c.User, c.Port, c.DbName, c.SSLMode)
+func (c *mysqlConfig) DataSource() string {
+	return fmt.Sprintf("%s:%s@localhost:3306/%s?charset=%s", c.User, c.Password, c.DataBase, c.Charset)
 }
